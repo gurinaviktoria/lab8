@@ -24,16 +24,46 @@ class HomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (_) => const AddPersonPage())),
+            context,
+            MaterialPageRoute(builder: (_) => const AddPersonPage())
+        ),
         child: const Icon(Icons.add),
       ),
       body: ListView.builder(
         itemCount: vm.people.length,
         itemBuilder: (_, index) {
           final person = vm.people[index];
-          return ListTile(
-            title: Text(person.name),
-            subtitle: Text(person.about),
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            child: ListTile(
+              title: Text(person.name),
+              subtitle: Text(person.about),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.copy),
+                    tooltip: 'Duplicate',
+                    onPressed: () => vm.duplicatePerson(index),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    tooltip: 'Edit',
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => AddPersonPage(person: person),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    tooltip: 'Delete',
+                    onPressed: () => vm.deletePerson(person.id!),
+                  ),
+                ],
+              ),
+            ),
           );
         },
       ),
